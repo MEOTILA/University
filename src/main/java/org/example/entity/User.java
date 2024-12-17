@@ -55,15 +55,15 @@ public class User {
     )
     @Length(min = 11, max = 11, message = "Phone Number must be 11 digits!")
     @Column(length = 11)
-    private Long phoneNum;
+    private Long phoneNumber;
 
     @NotBlank(message = "National Code can not be null or empty!")
     @Pattern(
             regexp = "^[0-9]+$",
             message = "National Code must contain only digits!"
     )
-    @Length(min = 11, max = 11, message = "National Code must be 10 digits!")
-    @Column(length = 11)
+    @Length(min = 10, max = 10, message = "National Code must be 10 digits!")
+    @Column(length = 10)
     private Long nationalId;
 
 }

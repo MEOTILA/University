@@ -1,7 +1,9 @@
 package org.example.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,20 +36,19 @@ public class Lesson {
     )
     @Length(min = 1, max = 1, message = "Lesson Unit must be 1 digit!")
     @Column(length = 1)
-    private Long lessonUnit;
+    private String lessonUnit;
 
     @NotBlank(message = "Lesson Capacity can not be null or empty!")
-    @Pattern(
-            regexp = "^[0-9]+$",
-            message = "Lesson Capacity must contain only digits!"
-    )
-    @Length(min = 1, max = 2, message = "Lesson Capacity must be 2 digit!")
+    @Pattern(regexp = "^[0-9]{1,2}$", message = "Lesson Capacity must be a number between 1 and 99!")
     @Column(length = 2)
-    private Long lessonCapacity;
+    private String lessonCapacity;
+
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
+    @NotNull(message = "Start Date cannot be null!")
+    @FutureOrPresent(message = "Start Date must be today or in the future!")
     private LocalDate startDate;
 }
