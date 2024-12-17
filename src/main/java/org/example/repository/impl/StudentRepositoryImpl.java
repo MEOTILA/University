@@ -1,11 +1,20 @@
 package org.example.repository.impl;
 
 import org.example.entity.Student;
+import org.example.repository.StudentRepository;
 import org.hibernate.Session;
 
-public class StudentRepositoryImpl {
+import java.util.List;
+
+public class StudentRepositoryImpl implements StudentRepository {
     public Student save(Session session, Student student) {
         session.persist(student);
         return student;
+    }
+
+    public List<Student> findAll(Session session) {
+        return session
+                .createQuery("from org.example.entity.Student", Student.class)
+                .list();
     }
 }

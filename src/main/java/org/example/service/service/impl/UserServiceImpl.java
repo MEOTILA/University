@@ -3,8 +3,9 @@ package org.example.service.service.impl;
 import org.example.SessionFactoryInstance;
 import org.example.entity.User;
 import org.example.repository.impl.UserRepositoryImpl;
+import org.example.service.UserService;
 
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
     UserRepositoryImpl userRepositoryImpl = new UserRepositoryImpl();
 
     public User save(User user) {
