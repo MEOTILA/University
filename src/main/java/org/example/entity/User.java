@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 @Entity
 @Builder
+@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,10 +27,16 @@ public class User {
     private String firstName;
 
     @NotBlank(message = "LastName can not be null or empty!")
-    @Pattern(regexp = "^[a-zA-Z]+$", message = "Lastname must contain only alphabetic characters!")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "LastName must contain only alphabetic characters!")
     @Length(min = 3, max = 50)
     @Column(length = 50)
-    private Long username;
+    private String lastName;
+
+    @NotBlank(message = "Username can not be null or empty!")
+    @Pattern(regexp = "^[a-zA-Z]+$", message = "Username must contain only alphabetic characters!")
+    @Length(min = 3, max = 25,message = "Username must be less than 25 character!")
+    @Column(length = 25)
+    private String username;
 
     @NotBlank(message = "Password can not be null or empty!")
     @Pattern(
@@ -39,7 +46,7 @@ public class User {
     )
     @Length(min = 8, max = 250)
     @Column(length = 250)
-    private Long password;
+    private String password;
 
     @NotBlank(message = "Phone Number can not be null or empty!")
     @Pattern(
