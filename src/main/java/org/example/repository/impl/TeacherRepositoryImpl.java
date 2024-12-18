@@ -1,5 +1,6 @@
 package org.example.repository.impl;
 
+import org.example.SessionFactoryInstance;
 import org.example.entity.Lesson;
 import org.example.entity.Student;
 import org.example.entity.Teacher;
@@ -23,5 +24,13 @@ public class TeacherRepositoryImpl implements TeacherRepository {
 
     public Optional<Teacher> findById(Session session, Long id) {
         return session.byId(Teacher.class).loadOptional(id);
+    }
+
+    public int deleteById(Session session, Long id) {
+        return session.createMutationQuery(
+                        "DELETE FROM org.example.entity.Teacher c WHERE c.id = :id"
+                )
+                .setParameter("id", id)
+                .executeUpdate();
     }
 }

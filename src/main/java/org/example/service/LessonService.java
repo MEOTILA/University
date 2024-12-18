@@ -9,6 +9,6 @@ public interface LessonService {
     public Lesson save(Lesson lesson);
     public List<Lesson> findAll();
     public Optional<Lesson> findById(Long id);
-
+    public void deleteById(Long id);
 
     }

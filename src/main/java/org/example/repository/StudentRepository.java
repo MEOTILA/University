@@ -10,4 +10,5 @@ public interface StudentRepository {
     public Student save(Session session, Student student);
     public List<Student> findAll(Session session);
     public Optional<Student> findById(Session session, Long id);
-}
+    public int deleteById(Session session, Long id);
+    }

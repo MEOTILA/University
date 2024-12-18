@@ -23,4 +23,12 @@ public class StudentRepositoryImpl implements StudentRepository {
     public Optional<Student> findById(Session session, Long id) {
         return session.byId(Student.class).loadOptional(id);
     }
+
+    public int deleteById(Session session, Long id) {
+        return session.createMutationQuery(
+                        "DELETE FROM org.example.entity.Student c WHERE c.id = :id"
+                )
+                .setParameter("id", id)
+                .executeUpdate();
+    }
 }

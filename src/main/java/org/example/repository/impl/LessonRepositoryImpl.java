@@ -22,4 +22,12 @@ public class LessonRepositoryImpl implements LessonRepository {
     public Optional<Lesson> findById(Session session, Long id) {
         return session.byId(Lesson.class).loadOptional(id);
     }
+
+    public int deleteById(Session session, Long id) {
+        return session.createMutationQuery(
+                        "DELETE FROM org.example.entity.Lesson c WHERE c.id = :id"
+                )
+                .setParameter("id", id)
+                .executeUpdate();
+    }
 }

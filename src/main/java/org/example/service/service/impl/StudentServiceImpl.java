@@ -82,4 +82,19 @@ public class StudentServiceImpl implements StudentService {
             }
         }
     }
+
+    public void deleteById(Long id) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            try {
+                session.beginTransaction();
+                var affectedRows = studentRepositoryImpl.deleteById(session, id);
+                if (affectedRows == 0)
+                    throw new RuntimeException("Student Not Found!");
+                session.getTransaction().commit();
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
