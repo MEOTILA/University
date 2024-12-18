@@ -2,12 +2,11 @@ package org.example.service.service.impl;
 
 import org.example.SessionFactoryInstance;
 import org.example.entity.Lesson;
-import org.example.entity.Student;
-import org.example.entity.Teacher;
 import org.example.repository.impl.LessonRepositoryImpl;
 import org.example.service.LessonService;
 
 import java.util.List;
+import java.util.Optional;
 
 public class LessonServiceImpl implements LessonService {
     LessonRepositoryImpl lessonRepositoryImpl = new LessonRepositoryImpl();
@@ -43,6 +42,36 @@ public class LessonServiceImpl implements LessonService {
                 }
                 session.getTransaction().commit();
                 return result;
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public Optional<Lesson> findById(Long id) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            try {
+                session.beginTransaction();
+                Optional<Lesson> res = lessonRepositoryImpl.findById(session, id);
+
+                if (res.isPresent()) {
+                    Lesson lesson = res.get();
+
+                    System.out.println("Founded Lesson:");
+                    System.out.println("ID: " + lesson.getId());
+                    System.out.println("Lesson Name: " + lesson.getLessonName());
+                    System.out.println("Lesson Unit: " + lesson.getLessonUnit());
+                    System.out.println("Lesson Capacity: " + lesson.getLessonCapacity());
+                    System.out.println("Teacher: " + lesson.getTeacher());
+                    System.out.println("Start Date: " + lesson.getStartDate());
+                    System.out.println("---------------------------------");
+                } else {
+                    System.out.println("No lesson found with ID: " + id);
+                }
+
+                session.getTransaction().commit();
+                return res;
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 throw new RuntimeException(e);
