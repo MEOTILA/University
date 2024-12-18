@@ -31,9 +31,13 @@ public class Main {
         Lesson lesson1 = Lesson.builder().lessonName("Math").build();
         lessonServiceImpl.save(lesson1);*/
 
-        studentServiceImpl.findAll();
+        /*studentServiceImpl.findAll();
         lessonServiceImpl.findAll();
-        teacherServiceImpl.findAll();
+        teacherServiceImpl.findAll();*/
+
+        lessonServiceImpl.findById(1L);
+        studentServiceImpl.findById(1L);
+        teacherServiceImpl.findById(1L);
 
 
 
