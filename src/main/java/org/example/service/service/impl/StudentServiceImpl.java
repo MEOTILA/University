@@ -97,4 +97,30 @@ public class StudentServiceImpl implements StudentService {
             }
         }
     }
+
+    public Student update(Student student) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            try {
+                session.beginTransaction();
+                var c = studentRepositoryImpl.findById(session, student.getId())
+                        .orElseThrow(() -> new RuntimeException("Student not found"));
+
+                c.setFirstName(student.getFirstName());
+                c.setLastName(student.getLastName());
+                c.setUsername(student.getUsername());
+                c.setPassword(student.getPassword());
+                c.setPhoneNumber(student.getPhoneNumber());
+                c.setEmail(student.getEmail());
+                c.setNationalId(student.getNationalId());
+                c.setStudentId(student.getStudentId());
+
+                studentRepositoryImpl.save(session, c);
+                session.getTransaction().commit();
+                return c;
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

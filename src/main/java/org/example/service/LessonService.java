@@ -10,5 +10,5 @@ public interface LessonService {
     public List<Lesson> findAll();
     public Optional<Lesson> findById(Long id);
     public void deleteById(Long id);
-
+    public Lesson update(Lesson lesson);
     }

@@ -2,6 +2,7 @@ package org.example.service.service.impl;
 
 import org.example.SessionFactoryInstance;
 import org.example.entity.Lesson;
+import org.example.entity.Student;
 import org.example.entity.Teacher;
 import org.example.repository.impl.TeacherRepositoryImpl;
 import org.example.service.TeacherService;
@@ -96,6 +97,34 @@ public class TeacherServiceImpl implements TeacherService {
                 if (affectedRows == 0)
                     throw new RuntimeException("Teacher Not Found!");
                 session.getTransaction().commit();
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public Teacher update(Teacher teacher) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            try {
+                session.beginTransaction();
+                var c = teacherRepositoryImpl.findById(session, teacher.getId())
+                        .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
+                c.setFirstName(teacher.getFirstName());
+                c.setLastName(teacher.getLastName());
+                c.setUsername(teacher.getUsername());
+                c.setPassword(teacher.getPassword());
+                c.setPhoneNumber(teacher.getPhoneNumber());
+                c.setEmail(teacher.getEmail());
+                c.setNationalId(teacher.getNationalId());
+                c.setTeacherField(teacher.getTeacherField());
+                c.setTeacherDegree(teacher.getTeacherDegree());
+                c.setTeacherId(teacher.getTeacherId());
+
+                teacherRepositoryImpl.save(session, c);
+                session.getTransaction().commit();
+                return c;
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 throw new RuntimeException(e);

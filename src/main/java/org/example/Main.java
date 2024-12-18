@@ -39,14 +39,15 @@ public class Main {
         studentServiceImpl.findById(1L);
         teacherServiceImpl.findById(1L);*/
 
-        lessonServiceImpl.findById(1L);
+/*        lessonServiceImpl.findById(1L);
         lessonServiceImpl.deleteById(1L);
 
         studentServiceImpl.findById(1L);
         studentServiceImpl.deleteById(1L);
 
         teacherServiceImpl.findById(1L);
-        teacherServiceImpl.deleteById(1L);
+        teacherServiceImpl.deleteById(1L);*/
+
 
 
     }

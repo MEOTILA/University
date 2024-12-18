@@ -93,4 +93,26 @@ public class LessonServiceImpl implements LessonService {
             }
         }
     }
+
+    public Lesson update(Lesson lesson) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            try {
+                session.beginTransaction();
+                var c = lessonRepositoryImpl.findById(session, lesson.getId())
+                        .orElseThrow(() -> new RuntimeException("Lesson not found"));
+
+                c.setLessonName(lesson.getLessonName());
+                c.setLessonUnit(lesson.getLessonUnit());
+                c.setLessonCapacity(lesson.getLessonCapacity());
+                c.setTeacher(lesson.getTeacher());
+                c.setStartDate(lesson.getStartDate());
+                lessonRepositoryImpl.save(session, c);
+                session.getTransaction().commit();
+                return c;
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

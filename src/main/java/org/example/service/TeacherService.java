@@ -10,6 +10,5 @@ public interface TeacherService {
     public List<Teacher> findAll();
     public Optional<Teacher> findById(Long id);
     public void deleteById(Long id);
-
-
-}
+    public Teacher update(Teacher teacher);
+    }
