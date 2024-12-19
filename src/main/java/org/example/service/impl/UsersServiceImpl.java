@@ -1,14 +1,14 @@
-package org.example.service.service.impl;
+package org.example.service.impl;
 
 import org.example.SessionFactoryInstance;
-import org.example.entity.User;
-import org.example.repository.impl.UserRepositoryImpl;
-import org.example.service.UserService;
+import org.example.entity.Users;
+import org.example.repository.impl.UsersRepositoryImpl;
+import org.example.service.UsersService;
 
-public class UserServiceImpl implements UserService {
-    UserRepositoryImpl userRepositoryImpl = new UserRepositoryImpl();
+public class UsersServiceImpl implements UsersService {
+    UsersRepositoryImpl userRepositoryImpl = new UsersRepositoryImpl();
 
-    public User save(User user) {
+    public Users save(Users user) {
         try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
