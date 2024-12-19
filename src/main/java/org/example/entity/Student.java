@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class Student extends Users {
             regexp = "^[0-9]+$",
             message = "Student ID must contain only digits!"
     )
-    @Length(min = 10, max = 10, message = "Student ID must be 10 digits!")
+    @Size(min = 10, max = 10, message = "Student ID must be 10 digits!")
     @Column(length = 10, unique = true)
     private String studentId;
 }
