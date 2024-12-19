@@ -38,7 +38,7 @@ public class Teacher {
     @NotBlank(message = "Username can not be null or empty!")
     @Pattern(regexp = "^[a-zA-Z]+$", message = "Username must contain only alphabetic characters!")
     @Length(min = 3, max = 25,message = "Username must be between 3 and 25 character!")
-    @Column(length = 25)
+    @Column(length = 25, unique = true)
     private String username;
 
 
@@ -59,7 +59,7 @@ public class Teacher {
             message = "Phone Number must contain only digits!"
     )
     @Length(min = 11, max = 11, message = "Phone Number must be 11 digits!")
-    @Column(length = 11)
+    @Column(length = 11, unique = true)
     private String phoneNumber;
 
 
@@ -74,7 +74,7 @@ public class Teacher {
             message = "National Code must contain only digits!"
     )
     @Length(min = 10, max = 10, message = "National Code must be 10 digits!")
-    @Column(length = 10)
+    @Column(length = 10, unique = true)
     private String nationalId;
 
 
@@ -98,6 +98,6 @@ public class Teacher {
             message = "Teacher ID must contain only digits!"
     )
     @Length(min = 10, max = 10, message = "Teacher ID must be 10 digits!")
-    @Column(length = 10)
+    @Column(length = 10, unique = true)
     private String teacherId;
 }
