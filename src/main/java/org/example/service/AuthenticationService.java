@@ -1,44 +1,13 @@
 package org.example.service;
 
-import org.example.entity.Student;
-import org.example.entity.Teacher;
+import org.example.entity.Users;
 
-public class AuthenticationService {
-    private static Teacher loggedInTeacher;
-    private static Student loggedInStudent;
+public interface AuthenticationService {
+    public void setLoggedUser(Users user);
 
-    public static void setLoggedInTeacher(Teacher teacher) {
-        loggedInTeacher = teacher;
-    }
+    public Users getLoggedInUser();
 
-    public static Teacher getLoggedInTeacher() {
-        return loggedInTeacher;
-    }
+    public void logout();
 
-    public static void TeacherLogout() {
-        loggedInTeacher = null;
-    }
-
-    public static boolean teacherIsLoggedIn() {
-        return loggedInTeacher != null;
-    }
-
-
-
-
-    public static void setLoggedInStudent(Student student) {
-        loggedInStudent = student;
-    }
-
-    public static Student getLoggedInStudent() {
-        return loggedInStudent;
-    }
-
-    public static void studentLogout() {
-        loggedInStudent = null;
-    }
-
-    public static boolean StudentIsLoggedIn() {
-        return loggedInStudent != null;
-    }
+    public boolean isLoggedIn();
 }
