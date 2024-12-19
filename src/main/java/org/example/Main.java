@@ -6,6 +6,7 @@ import org.example.service.impl.StudentServiceImpl;
 import org.example.service.impl.TeacherServiceImpl;
 import org.example.service.impl.UserServiceImpl;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
@@ -13,33 +14,35 @@ public class Main {
     static StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
     static TeacherServiceImpl teacherServiceImpl = new TeacherServiceImpl();
     static LessonServiceImpl lessonServiceImpl = new LessonServiceImpl();
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
 
         while (true) {
-            Scanner scanner = new Scanner(System.in);
+
             System.out.println("Welcome to University app <3");
             System.out.println("Main Menu");
             System.out.println("1. Admin Login");
             System.out.println("2. Teacher Login");
             System.out.println("3. Student Login");
             System.out.println("Choose You Action: ");
-            String option = scanner.nextLine();
+
+            int option = getNum();
 
             switch (option) {
-                case "1":
+                case 1:
                     adminMenu();
                     break;
 
-                case "2":
+                case 2:
                     teacherMenu();
                     break;
 
-                case "3":
+                case 3:
                     studentMenu();
                     break;
 
-                case "4":
+                case 4:
                     System.exit(0);
                     break;
 
@@ -52,7 +55,6 @@ public class Main {
     }
 
     private static void adminMenu() {
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("*Admin Menu*");
         System.out.println("1. View All Teachers List");
@@ -65,42 +67,42 @@ public class Main {
         System.out.println("8. Add a Lesson to a Teacher");
         System.out.println("9. Main Menu");
         System.out.println("Choose You Action:");
-        String option = scanner.nextLine();
+
+        int option = getNum();
 
         while (true) {
             switch (option) {
-                case "1":
+                case 1:
                     break;
 
-                case "2":
+                case 2:
                     break;
 
-                case "3":
+                case 3:
                     break;
 
-                case "4":
+                case 4:
                     break;
 
-                case "5":
+                case 5:
                     break;
 
-                case "6":
+                case 6:
                     break;
 
-                case "7":
+                case 7:
                     break;
 
-                case "8":
+                case 8:
                     break;
 
-                case "9":
+                case 9:
                     return;
             }
         }
     }
 
         private static void teacherMenu () {
-            Scanner scanner = new Scanner(System.in);
 
             System.out.println("*Teacher Menu*");
             System.out.println("1. View My Lessons");
@@ -108,20 +110,21 @@ public class Main {
             System.out.println("3. Submit Score");
             System.out.println("4. Main Menu");
             System.out.println("Choose You Action:");
-            String option = scanner.nextLine();
+
+            int option = getNum();
 
             while (true) {
                 switch (option) {
-                    case "1":
+                    case 1:
                         break;
 
-                    case "2":
+                    case 2:
                         break;
 
-                    case "3":
+                    case 3:
                         break;
 
-                    case "4":
+                    case 4:
                         return;
                 }
             }
@@ -129,7 +132,6 @@ public class Main {
 
 
         private static void studentMenu () {
-            Scanner scanner = new Scanner(System.in);
 
             System.out.println("*Student Menu*");
             System.out.println("1. Take a Course");
@@ -137,24 +139,47 @@ public class Main {
             System.out.println("3. Change Password");
             System.out.println("4. Main Menu");
             System.out.println("Choose You Action:");
-            String option = scanner.nextLine();
+
+            int option = getNum();
 
             while (true) {
                 switch (option) {
-                    case "1":
+                    case 1:
                         break;
 
-                    case "2":
+                    case 2:
                         break;
 
-                    case "3":
+                    case 3:
                         break;
 
-                    case "4":
+                    case 4:
                         return;
                 }
             }
         }
+
+    public static int getNum() {
+        int num = 0;
+        try {
+            num = scanner.nextInt();
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            scanner.nextLine();
+        }
+        return num;
+    }
+
+    public static String getString() {
+        String input = null;
+        try {
+            input = scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println(e.getMessage());
+        }
+        return input;
+    }
 
 
 
