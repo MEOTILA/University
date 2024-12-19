@@ -11,4 +11,6 @@ public interface TeacherService {
     public Optional<Teacher> findById(Long id);
     public void deleteById(Long id);
     public Teacher update(Teacher teacher);
-    }
+    public Teacher updatePassword(Teacher teacher);
+
+}

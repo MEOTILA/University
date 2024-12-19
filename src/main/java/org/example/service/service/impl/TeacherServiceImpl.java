@@ -1,8 +1,7 @@
 package org.example.service.service.impl;
 
 import org.example.SessionFactoryInstance;
-import org.example.entity.Lesson;
-import org.example.entity.Student;
+
 import org.example.entity.Teacher;
 import org.example.repository.impl.TeacherRepositoryImpl;
 import org.example.service.TeacherService;
@@ -121,6 +120,26 @@ public class TeacherServiceImpl implements TeacherService {
                 c.setTeacherField(teacher.getTeacherField());
                 c.setTeacherDegree(teacher.getTeacherDegree());
                 c.setTeacherId(teacher.getTeacherId());
+
+                teacherRepositoryImpl.save(session, c);
+                session.getTransaction().commit();
+                return c;
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
+    public Teacher updatePassword(Teacher teacher) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            try {
+                session.beginTransaction();
+                var c = teacherRepositoryImpl.findById(session, teacher.getId())
+                        .orElseThrow(() -> new RuntimeException("Teacher not found"));
+
+                c.setPassword(teacher.getPassword());
 
                 teacherRepositoryImpl.save(session, c);
                 session.getTransaction().commit();

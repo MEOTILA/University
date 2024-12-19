@@ -11,4 +11,5 @@ public interface StudentService {
     public Optional<Student> findById(Long id);
     public void deleteById(Long id);
     public Student update(Student student);
+    public Student updatePassword(Student student);
     }

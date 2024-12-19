@@ -1,7 +1,7 @@
 package org.example.service.service.impl;
 
 import org.example.SessionFactoryInstance;
-import org.example.entity.Lesson;
+
 import org.example.entity.Student;
 import org.example.repository.impl.StudentRepositoryImpl;
 import org.example.service.StudentService;
@@ -113,6 +113,25 @@ public class StudentServiceImpl implements StudentService {
                 c.setEmail(student.getEmail());
                 c.setNationalId(student.getNationalId());
                 c.setStudentId(student.getStudentId());
+
+                studentRepositoryImpl.save(session, c);
+                session.getTransaction().commit();
+                return c;
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public Student updatePassword(Student student) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            try {
+                session.beginTransaction();
+                var c = studentRepositoryImpl.findById(session, student.getId())
+                        .orElseThrow(() -> new RuntimeException("Student not found"));
+
+                c.setPassword(student.getPassword());
 
                 studentRepositoryImpl.save(session, c);
                 session.getTransaction().commit();

@@ -48,6 +48,8 @@ public class Main {
         teacherServiceImpl.findById(1L);
         teacherServiceImpl.deleteById(1L);*/
 
+        Teacher teacher1 = Teacher.builder().id(2L).password("123").build();
+        teacherServiceImpl.updatePassword(teacher1);
 
 
     }
