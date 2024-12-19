@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 
 @Data
 @AllArgsConstructor
@@ -65,7 +64,7 @@ public class Users {
 
 
     @NotBlank(message = "Email can not be null or empty!")
-    @Email(regexp = "^(.+)@(.+)$",message = "Invalid email format")
+    @Email(regexp = "^(.+)@(.+)$",message = "Invalid email format!")
     @Column(unique = true)
     private String email;
 
