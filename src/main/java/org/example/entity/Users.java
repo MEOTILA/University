@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @MappedSuperclass
 
-public class Users {
+public abstract class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
