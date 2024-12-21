@@ -109,10 +109,7 @@ public class Main {
             System.out.println("1. Admin Login");
             System.out.println("2. Teacher Login");
             System.out.println("3. Student Login");
-            System.out.println("4. Admin Login");
-            System.out.println("5. Teacher Login");
-            System.out.println("6. Student Login");
-            System.out.println("7. Exit");
+            System.out.println("4. Exit");
             System.out.println("Choose You Action: ");
 
             int option = getInt();
@@ -121,10 +118,7 @@ public class Main {
                     1, () -> adminLoginMenu(),
                     2, () -> teacherLoginMenu(),
                     3, () -> studentLoginMenu(),
-                    4, () -> adminMenu(),
-                    5, () -> teacherMenu(),
-                    6, () -> studentMenu(),
-                    7, () -> System.exit(0)
+                    4, () -> System.exit(0)
             );
 
             menuActions.getOrDefault(option, () -> System.out.println("Invalid number. Please try again.")).run();
