@@ -165,10 +165,10 @@ public class StudentServiceImpl implements StudentService {
                     session.getTransaction().commit();
                     return true;
                 } else {
-                    throw new RuntimeException("Wrong password ❗");
+                    throw new FailedToLoginException("Wrong password or username ❗");
                 }
             } else {
-                throw new RuntimeException("Admin not found ❗");
+                throw new FailedToLoginException("Admin not found ❗");
             }
         } catch (Exception e) {
             throw new FailedToLoginException("Error during login: " + e.getMessage());
