@@ -168,7 +168,7 @@ public class StudentServiceImpl implements StudentService {
                     throw new FailedToLoginException("Wrong password or username ❗");
                 }
             } else {
-                throw new FailedToLoginException("Admin not found ❗");
+                throw new FailedToLoginException("Student not found ❗");
             }
         } catch (Exception e) {
             throw new FailedToLoginException("Error during login: " + e.getMessage());

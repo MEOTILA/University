@@ -175,7 +175,7 @@ public class TeacherServiceImpl implements TeacherService {
                     throw new FailedToLoginException("Wrong password or username ❗");
                 }
             } else {
-                throw new FailedToLoginException("Admin not found ❗");
+                throw new FailedToLoginException("Teacher not found ❗");
             }
         } catch (Exception e) {
             throw new FailedToLoginException("Error during login: " + e.getMessage());
