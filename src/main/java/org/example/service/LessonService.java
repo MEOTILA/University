@@ -16,4 +16,6 @@ public interface LessonService {
     public void deleteById(Long id);
 
     public Lesson update(Lesson lesson);
+
+    public Lesson updateTeacher(Lesson lesson, Long teacherId, Long lessonId );
 }

@@ -10,6 +10,7 @@ import org.example.service.impl.*;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
@@ -161,7 +162,7 @@ public class Main {
         System.out.println("8. Add a new Lesson");
         System.out.println("9. Remove a Lesson");
         System.out.println("10. Edit a Lesson");
-        System.out.println("11. Add a Lesson to a Teacher");
+        System.out.println("11. Update a Lesson Teacher");
         System.out.println("12. Change Password");
         System.out.println("13. Main Menu");
         System.out.println("Choose You Action:");
@@ -292,6 +293,22 @@ public class Main {
                     break;
 
                 case 11:
+                    System.out.println("Please Enter the Lesson ID:");
+                    Long lessonIdToUpdate = getLong();
+                    System.out.println("Please Enter the Lesson Teacher ID:");
+                    Long trId2 = getLong();
+
+                    Optional<Lesson> optionalLesson = lessonServiceImpl.findById(lessonIdToUpdate);
+
+                    if (optionalLesson.isPresent()) {
+                        Lesson updatingLesson = optionalLesson.get();
+
+                        lessonServiceImpl.updateTeacher(updatingLesson, trId2, lessonIdToUpdate);
+                        System.out.println("Lesson updated successfully.");
+                    } else {
+                        System.out.println("Lesson with ID " + lessonIdToUpdate + " not found.");
+                    }
+
                     break;
 
                 case 12:

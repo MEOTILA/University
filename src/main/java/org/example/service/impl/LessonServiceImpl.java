@@ -5,6 +5,7 @@ import org.example.entity.Lesson;
 import org.example.entity.Student;
 import org.example.entity.Teacher;
 import org.example.exceptions.LessonNotFoundException;
+import org.example.exceptions.TeacherNotFoundException;
 import org.example.repository.impl.LessonRepositoryImpl;
 import org.example.repository.impl.TeacherRepositoryImpl;
 import org.example.service.LessonService;
@@ -173,6 +174,53 @@ public class LessonServiceImpl implements LessonService {
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public Lesson updateTeacher(Lesson lesson, Long teacherId, Long lessonId) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            try {
+                session.beginTransaction();
+
+                var updatingLesson = lessonRepositoryImpl.findById(session, lessonId)
+                        .orElseThrow(() -> new RuntimeException("Lesson not found!"));
+
+                Teacher teacher = teacherRepositoryImpl.findById2(session, teacherId);
+                if (teacher == null) {
+                    throw new TeacherNotFoundException("Teacher with ID " + teacherId + " not found.");
+                }
+
+
+                updatingLesson.setLessonName(lesson.getLessonName());
+                updatingLesson.setLessonUnit(lesson.getLessonUnit());
+                updatingLesson.setLessonCapacity(lesson.getLessonCapacity());
+                updatingLesson.setTeacher(teacher);
+                updatingLesson.setStartDate(lesson.getStartDate());
+
+                if (!updatingLesson.getStudents().equals(lesson.getStudents())) {
+                    for (Student student : updatingLesson.getStudents()) {
+                        if (!lesson.getStudents().contains(student)) {
+                            student.getLessons().remove(updatingLesson);
+                        }
+                    }
+
+                    updatingLesson.getStudents().clear();
+                    updatingLesson.getStudents().addAll(lesson.getStudents());
+
+                    for (Student student : lesson.getStudents()) {
+                        student.getLessons().add(updatingLesson);  // Ensure bi-directional relationship
+                    }
+                }
+
+                lessonRepositoryImpl.save(session, updatingLesson);
+
+                session.getTransaction().commit();
+
+                return updatingLesson;
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException("Error updating teacher for the lesson", e);
             }
         }
     }
