@@ -13,11 +13,20 @@ public class LessonRepositoryImpl implements LessonRepository {
         return lesson;
     }
 
-    public List<Lesson> findAll(Session session) {
+    /*public List<Lesson> findAll(Session session) {
         return session
                 .createQuery("from org.example.entity.Lesson", Lesson.class)
                 .list();
+    }*/
+
+    public List<Lesson> findAll(Session session) {
+        return session.createQuery(
+                        "SELECT l FROM Lesson l " +
+                                "LEFT JOIN FETCH l.teacher t " +
+                                "LEFT JOIN FETCH l.students s", Lesson.class)
+                .getResultList();
     }
+
 
     public Optional<Lesson> findById(Session session, Long id) {
         return session.byId(Lesson.class).loadOptional(id);
@@ -25,7 +34,7 @@ public class LessonRepositoryImpl implements LessonRepository {
 
     public int deleteById(Session session, Long id) {
         return session.createMutationQuery(
-                        "DELETE FROM org.example.entity.Lesson c WHERE c.id = :id"
+                        "DELETE FROM Lesson c WHERE c.id = :id"
                 )
                 .setParameter("id", id)
                 .executeUpdate();

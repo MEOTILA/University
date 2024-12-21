@@ -6,11 +6,14 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -28,6 +31,13 @@ public class Student extends Users {
 
     @Size(max = 6, message = "A student cannot take more than 6 lessons!")
     @ManyToMany(mappedBy = "students")
-    private Set<Lesson> lessons = new HashSet<>();
+    private List<Lesson> lessons = new ArrayList<>();
+
+
+    @Override
+    public String toString() {
+        return String.format("Student{id=%d, studentId='%s', lessons=%s}",
+                getId(), studentId, lessons != null ? lessons.size() : 0);
+    }
 
 }

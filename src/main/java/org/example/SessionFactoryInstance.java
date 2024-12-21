@@ -3,7 +3,7 @@ package org.example;
 import org.example.entity.Lesson;
 import org.example.entity.Student;
 import org.example.entity.Teacher;
-import org.example.entity.User;
+import org.example.entity.Users;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -15,7 +15,7 @@ public class SessionFactoryInstance {
     static {
         sessionFactory = new Configuration()
                 .configure()
-                .addAnnotatedClass(User.class)
+                .addAnnotatedClass(Users.class)
                 .addAnnotatedClass(Student.class)
                 .addAnnotatedClass(Teacher.class)
                 .addAnnotatedClass(Lesson.class)

@@ -1,6 +1,7 @@
 package org.example;
 
 
+import org.example.entity.Admin;
 import org.example.entity.Lesson;
 import org.example.entity.Student;
 import org.example.entity.Teacher;
@@ -81,6 +82,42 @@ public class Main {
         teacher1.setTeacherDegree("PhD");
         teacher1.setTeacherId("1234567890");
         //teacherServiceImpl.save(teacher1);
+
+        Admin admin1 = new Admin();
+        admin1.setFirstName("Sattar");
+        admin1.setLastName("Boushehri");
+        admin1.setUsername("admin");
+        admin1.setPassword("admin");
+        admin1.setPhoneNumber("01234555891");
+        admin1.setEmail("admin@example.com");
+        admin1.setNationalId("1234567893");
+        admin1.setAdminId("9876543274");
+
+
+        Lesson lesson1 = Lesson.builder().lessonName("Math").build();
+        //lessonServiceImpl.save(lesson1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -231,8 +268,8 @@ public class Main {
                     System.out.println("Please Enter the Lesson Capacity:");
                     Integer lessonCap = getInt();
                     newLesson.setLessonCapacity(lessonCap);
-                    System.out.println("Please Enter the Lesson Teacher Name:");
-                    String trName = getString();
+                    System.out.println("Please Enter the Lesson Teacher ID:");
+                    Long trId = getLong();
                     System.out.println("Please Enter the Year of the Start:");
                     int year = getInt();
                     System.out.println("Please Enter the Month of the Start:");
@@ -242,7 +279,7 @@ public class Main {
                     LocalDate startDate = LocalDate.of(year,month,day);
                     newLesson.setStartDate(startDate);
 
-                    lessonServiceImpl.save(newLesson);
+                    lessonServiceImpl.save(newLesson,trId);
                     break;
 
                 case 9:
@@ -258,6 +295,9 @@ public class Main {
                     break;
 
                 case 12:
+                    //TODO**********************************************
+                    System.out.println("Please Enter Your New Password:");
+                    authenticationServiceImpl.getLoggedInUser().getId();
                     break;
 
                 case 13:

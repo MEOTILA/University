@@ -1,8 +1,9 @@
-package org.example.service.service.impl;
+package org.example.service.impl;
 
 import org.example.SessionFactoryInstance;
 
 import org.example.entity.Student;
+import org.example.exceptions.StudentNotFoundException;
 import org.example.repository.impl.StudentRepositoryImpl;
 import org.example.service.StudentService;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 public class StudentServiceImpl implements StudentService {
     StudentRepositoryImpl studentRepositoryImpl = new StudentRepositoryImpl();
+
     public Student save(Student student) {
         try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
             try {
@@ -89,7 +91,7 @@ public class StudentServiceImpl implements StudentService {
                 session.beginTransaction();
                 var affectedRows = studentRepositoryImpl.deleteById(session, id);
                 if (affectedRows == 0)
-                    throw new RuntimeException("Student Not Found!");
+                    throw new StudentNotFoundException("Student not found with ID: " + id);
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();

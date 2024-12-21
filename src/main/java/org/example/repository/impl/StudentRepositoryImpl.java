@@ -1,6 +1,5 @@
 package org.example.repository.impl;
 
-import org.example.entity.Lesson;
 import org.example.entity.Student;
 import org.example.repository.StudentRepository;
 import org.hibernate.Session;

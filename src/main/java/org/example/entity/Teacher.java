@@ -6,11 +6,15 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+
+import java.util.List;
+
 
 @EqualsAndHashCode(callSuper = true)
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -42,5 +46,25 @@ public class Teacher extends Users {
 
     @Size(max = 10, message = "A teacher cannot take more than 10 lessons!")
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Lesson> lessons = new HashSet<>();
+    private List<Lesson> lessons = new ArrayList<>();
+
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Teacher {\n" +
+                        "    id=%d,\n" +
+                        "    teacherField='%s',\n" +
+                        "    teacherDegree='%s',\n" +
+                        "    teacherId='%s',\n" +
+                        "    lessons=%d\n" +
+                        "}",
+                getId(),
+                teacherField,
+                teacherDegree,
+                teacherId,
+                lessons != null ? lessons.size() : 0
+        );
+    }
+
 }

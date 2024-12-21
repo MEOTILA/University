@@ -1,8 +1,6 @@
 package org.example.repository.impl;
 
-import org.example.SessionFactoryInstance;
-import org.example.entity.Lesson;
-import org.example.entity.Student;
+
 import org.example.entity.Teacher;
 import org.example.repository.TeacherRepository;
 import org.hibernate.Session;
@@ -26,6 +24,10 @@ public class TeacherRepositoryImpl implements TeacherRepository {
         return session.byId(Teacher.class).loadOptional(id);
     }
 
+    public Teacher findById2(Session session, Long teacherId) {
+        return session.byId(Teacher.class).load(teacherId);
+    }
+
     public int deleteById(Session session, Long id) {
         return session.createMutationQuery(
                         "DELETE FROM org.example.entity.Teacher c WHERE c.id = :id"
@@ -33,4 +35,5 @@ public class TeacherRepositoryImpl implements TeacherRepository {
                 .setParameter("id", id)
                 .executeUpdate();
     }
+
 }

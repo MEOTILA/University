@@ -2,17 +2,17 @@ package org.example.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+
+@Getter
+@Setter
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -47,18 +47,24 @@ public class Lesson {
 
 
     @NotNull(message = "Teacher cannot be null!")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "teacher_id", nullable = false)
     private Teacher teacher;
 
 
     @Size(max = 99, message = "A lesson cannot have more than 99 students!")
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "student_lesson",
             joinColumns = @JoinColumn(name = "lesson_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private Set<Student> students = new HashSet<>();
+    private List<Student> students = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return String.format("Lesson{id=%d, lessonName='%s', lessonUnit=%d, lessonCapacity=%d, startDate=%s, teacher=%s}",
+                id, lessonName, lessonUnit, lessonCapacity, startDate, teacher != null ? teacher.getId() : "null");
+    }
 
 }

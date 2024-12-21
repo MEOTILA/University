@@ -5,12 +5,11 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -79,4 +78,10 @@ public class Users {
     @Column(length = 10, unique = true)
     private String nationalId;
 
+
+    @Override
+    public String toString() {
+        return String.format("User{id=%d, firstName='%s', lastName='%s', username='%s', phoneNumber='%s', email='%s', nationalId='%s'}",
+                id, firstName, lastName, username, phoneNumber, email, nationalId);
+    }
 }

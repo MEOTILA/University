@@ -1,8 +1,12 @@
-package org.example.service.service.impl;
+package org.example.service.impl;
 
 import org.example.SessionFactoryInstance;
 import org.example.entity.Lesson;
+import org.example.entity.Student;
+import org.example.entity.Teacher;
+import org.example.exceptions.LessonNotFoundException;
 import org.example.repository.impl.LessonRepositoryImpl;
+import org.example.repository.impl.TeacherRepositoryImpl;
 import org.example.service.LessonService;
 
 import java.util.List;
@@ -10,11 +14,21 @@ import java.util.Optional;
 
 public class LessonServiceImpl implements LessonService {
     LessonRepositoryImpl lessonRepositoryImpl = new LessonRepositoryImpl();
+    TeacherRepositoryImpl teacherRepositoryImpl = new TeacherRepositoryImpl();
 
-    public Lesson save(Lesson lesson) {
+    /*public Lesson save(Lesson lesson) {
         try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
+                if (lesson.getTeacher() == null) {
+                    throw new RuntimeException("Teacher cannot be null for the lesson");
+                }
+
+                if (lesson.getStudents() != null) {
+                    for (Student student : lesson.getStudents()) {
+                        student.getLessons().add(lesson);
+                    }
+                }
                 lessonRepositoryImpl.save(session, lesson);
                 session.getTransaction().commit();
                 return lesson;
@@ -23,31 +37,68 @@ public class LessonServiceImpl implements LessonService {
                 throw new RuntimeException(e);
             }
         }
-    }
+    }*/
 
-    public List<Lesson> findAll() {
+    public Lesson save(Lesson lesson, Long teacherId) {
         try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
-                var result = lessonRepositoryImpl.findAll(session);
-                System.out.println("List of Lessons:");
+
+                Teacher teacher = teacherRepositoryImpl.findById2(session, teacherId);
+                if (teacher == null) {
+                    throw new RuntimeException("Teacher with ID " + teacherId + " not found.");
+                }
+
+                lesson.setTeacher(teacher);
+
+                if (lesson.getStudents() != null) {
+                    for (Student student : lesson.getStudents()) {
+                        student.getLessons().add(lesson);
+                    }
+                }
+
+                // Save the lesson
+                lessonRepositoryImpl.save(session, lesson);
+                session.getTransaction().commit();
+                return lesson;
+            } catch (Exception e) {
+                session.getTransaction().rollback();
+                throw new RuntimeException("Error saving lesson", e);
+            }
+        }
+    }
+
+
+    public List<Lesson> findAll() {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            List<Lesson> result = lessonRepositoryImpl.findAll(session);
+
+            System.out.println("List of Lessons:");
+            if (result != null && !result.isEmpty()) {
                 for (Lesson lesson : result) {
                     System.out.println("ID: " + lesson.getId());
                     System.out.println("Lesson Name: " + lesson.getLessonName());
                     System.out.println("Lesson Unit: " + lesson.getLessonUnit());
                     System.out.println("Lesson Capacity: " + lesson.getLessonCapacity());
-                    System.out.println("Lesson Name: " + lesson.getTeacher());
+                    System.out.println("Teacher: " + lesson.getTeacher());
                     System.out.println("Start Date: " + lesson.getStartDate());
+                    System.out.println("Students: " + lesson.getStudents());
                     System.out.println("---------------------------------");
                 }
-                session.getTransaction().commit();
-                return result;
-            } catch (Exception e) {
-                session.getTransaction().rollback();
-                throw new RuntimeException(e);
+            } else {
+                System.out.println("No lessons found.");
             }
+
+            session.getTransaction().commit();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error retrieving lessons", e);
         }
     }
+
 
     public Optional<Lesson> findById(Long id) {
         try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
@@ -65,6 +116,7 @@ public class LessonServiceImpl implements LessonService {
                     System.out.println("Lesson Capacity: " + lesson.getLessonCapacity());
                     System.out.println("Teacher: " + lesson.getTeacher());
                     System.out.println("Start Date: " + lesson.getStartDate());
+                    System.out.println("Students: " + lesson.getStudents());
                     System.out.println("---------------------------------");
                 } else {
                     System.out.println("No lesson found with ID: " + id);
@@ -85,7 +137,7 @@ public class LessonServiceImpl implements LessonService {
                 session.beginTransaction();
                 var affectedRows = lessonRepositoryImpl.deleteById(session, id);
                 if (affectedRows == 0)
-                    throw new RuntimeException("Lesson Not Found!");
+                    throw new LessonNotFoundException("Lesson Not Found!" + id);
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
@@ -98,17 +150,26 @@ public class LessonServiceImpl implements LessonService {
         try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
-                var c = lessonRepositoryImpl.findById(session, lesson.getId())
-                        .orElseThrow(() -> new RuntimeException("Lesson not found"));
+                var existingLesson = lessonRepositoryImpl.findById(session, lesson.getId())
+                        .orElseThrow(() -> new RuntimeException("Lesson not found!"));
 
-                c.setLessonName(lesson.getLessonName());
-                c.setLessonUnit(lesson.getLessonUnit());
-                c.setLessonCapacity(lesson.getLessonCapacity());
-                c.setTeacher(lesson.getTeacher());
-                c.setStartDate(lesson.getStartDate());
-                lessonRepositoryImpl.save(session, c);
+                existingLesson.setLessonName(lesson.getLessonName());
+                existingLesson.setLessonUnit(lesson.getLessonUnit());
+                existingLesson.setLessonCapacity(lesson.getLessonCapacity());
+                existingLesson.setTeacher(lesson.getTeacher());
+                existingLesson.setStartDate(lesson.getStartDate());
+
+                if (!existingLesson.getStudents().equals(lesson.getStudents())) {
+                    existingLesson.getStudents().clear();
+                    existingLesson.getStudents().addAll(lesson.getStudents());
+                    for (Student student : lesson.getStudents()) {
+                        student.getLessons().add(existingLesson);
+                    }
+                }
+
+                lessonRepositoryImpl.save(session, existingLesson);
                 session.getTransaction().commit();
-                return c;
+                return existingLesson;
             } catch (Exception e) {
                 session.getTransaction().rollback();
                 throw new RuntimeException(e);

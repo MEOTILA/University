@@ -1,8 +1,9 @@
-package org.example.service.service.impl;
+package org.example.service.impl;
 
 import org.example.SessionFactoryInstance;
 
 import org.example.entity.Teacher;
+import org.example.exceptions.TeacherNotFoundException;
 import org.example.repository.impl.TeacherRepositoryImpl;
 import org.example.service.TeacherService;
 
@@ -94,7 +95,7 @@ public class TeacherServiceImpl implements TeacherService {
                 session.beginTransaction();
                 var affectedRows = teacherRepositoryImpl.deleteById(session, id);
                 if (affectedRows == 0)
-                    throw new RuntimeException("Teacher Not Found!");
+                    throw new TeacherNotFoundException("Teacher Not Found!" + id);
                 session.getTransaction().commit();
             } catch (Exception e) {
                 session.getTransaction().rollback();
@@ -108,7 +109,7 @@ public class TeacherServiceImpl implements TeacherService {
             try {
                 session.beginTransaction();
                 var c = teacherRepositoryImpl.findById(session, teacher.getId())
-                        .orElseThrow(() -> new RuntimeException("Teacher not found"));
+                        .orElseThrow(() -> new RuntimeException("Teacher not found!"));
 
                 c.setFirstName(teacher.getFirstName());
                 c.setLastName(teacher.getLastName());
