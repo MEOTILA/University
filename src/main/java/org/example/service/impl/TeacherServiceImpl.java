@@ -2,7 +2,9 @@ package org.example.service.impl;
 
 import org.example.SessionFactoryInstance;
 
+import org.example.entity.Student;
 import org.example.entity.Teacher;
+import org.example.exceptions.FailedToLoginException;
 import org.example.exceptions.TeacherNotFoundException;
 import org.example.repository.impl.TeacherRepositoryImpl;
 import org.example.service.TeacherService;
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 public class TeacherServiceImpl implements TeacherService {
     TeacherRepositoryImpl teacherRepositoryImpl = new TeacherRepositoryImpl();
+    AuthenticationServiceImpl authenticationServiceImpl = new AuthenticationServiceImpl();
 
     public Teacher save(Teacher teacher) {
         try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
@@ -149,6 +152,43 @@ public class TeacherServiceImpl implements TeacherService {
                 session.getTransaction().rollback();
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    public boolean teacherLogin(String username, String password) {
+        try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            Optional<Teacher> optionalTeacher = teacherRepositoryImpl.findByUsername(session, username);
+
+            if (optionalTeacher.isPresent()) {
+                Teacher teacher = optionalTeacher.get();
+
+                if (teacher.getPassword().equals(password)) {
+
+                    authenticationServiceImpl.setLoggedUser(teacher);
+                    System.out.println("Welcome Dear " + authenticationServiceImpl.getLoggedInUser().getUsername() + "😍");
+
+                    session.getTransaction().commit();
+                    return true;
+                } else {
+                    throw new RuntimeException("Wrong password ❗");
+                }
+            } else {
+                throw new RuntimeException("Admin not found ❗");
+            }
+        } catch (Exception e) {
+            throw new FailedToLoginException("Error during login: " + e.getMessage());
+        }
+    }
+
+    public void teacherLogout() {
+        Teacher teacher = (Teacher) authenticationServiceImpl.getLoggedInUser();
+        if (teacher != null) {
+            System.out.println("Good Bye Dear " + teacher.getFirstName() + "👋🏻");
+            authenticationServiceImpl.logout();
+        } else {
+            System.out.println("Error!");
         }
     }
 }

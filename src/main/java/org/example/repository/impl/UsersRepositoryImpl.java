@@ -31,4 +31,7 @@ public class UsersRepositoryImpl implements UsersRepository {
                 .setParameter("id", id)
                 .executeUpdate();
     }
+    public Optional<Users> findByUsername(Session session, String username) {
+        return session.byId(Users.class).loadOptional(username);
+    }
 }

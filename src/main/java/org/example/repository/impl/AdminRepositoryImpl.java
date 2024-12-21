@@ -2,6 +2,7 @@ package org.example.repository.impl;
 
 import org.example.entity.Admin;
 import org.example.entity.Teacher;
+import org.example.entity.Users;
 import org.example.repository.AdminRepository;
 import org.hibernate.Session;
 
@@ -31,4 +32,15 @@ public class AdminRepositoryImpl implements AdminRepository {
     public int deleteById(Session session, Long id) {
         return 0;
     }
+
+    /*public Optional<Admin> findByUsername(Session session, String username) {
+        return session.byId(Admin.class).loadOptional(username);
+    }*/
+
+    public Optional<Admin> findByUsername(Session session, String username) {
+        return session.createQuery("FROM Admin WHERE username = :username", Admin.class)
+                .setParameter("username", username)
+                .uniqueResultOptional();
+    }
+
 }

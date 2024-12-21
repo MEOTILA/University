@@ -11,4 +11,5 @@ public interface StudentRepository {
     public List<Student> findAll(Session session);
     public Optional<Student> findById(Session session, Long id);
     public int deleteById(Session session, Long id);
+    public Optional<Student> findByUsername(Session session, String username);
     }

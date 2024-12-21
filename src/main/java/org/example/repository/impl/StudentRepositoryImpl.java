@@ -1,5 +1,6 @@
 package org.example.repository.impl;
 
+import org.example.entity.Admin;
 import org.example.entity.Student;
 import org.example.repository.StudentRepository;
 import org.hibernate.Session;
@@ -29,5 +30,11 @@ public class StudentRepositoryImpl implements StudentRepository {
                 )
                 .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    public Optional<Student> findByUsername(Session session, String username) {
+        return session.createQuery("FROM Student WHERE username = :username", Student.class)
+                .setParameter("username", username)
+                .uniqueResultOptional();
     }
 }

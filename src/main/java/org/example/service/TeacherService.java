@@ -7,10 +7,19 @@ import java.util.Optional;
 
 public interface TeacherService {
     public Teacher save(Teacher teacher);
+
     public List<Teacher> findAll();
+
     public Optional<Teacher> findById(Long id);
+
     public void deleteById(Long id);
+
     public Teacher update(Teacher teacher);
+
     public Teacher updatePassword(Teacher teacher);
+
+    public boolean teacherLogin(String username, String password);
+
+    public void teacherLogout();
 
 }

@@ -12,4 +12,5 @@ public interface UsersRepository {
     public List<Users> findAll(Session session);
     public Optional<Users> findById(Session session, Long id);
     public int deleteById(Session session, Long id);
+    public Optional<Users> findByUsername(Session session, String username);
 }

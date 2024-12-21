@@ -5,6 +5,7 @@ import org.example.entity.Admin;
 import org.example.entity.Lesson;
 import org.example.entity.Student;
 import org.example.entity.Teacher;
+import org.example.exceptions.FailedToLoginException;
 import org.example.service.impl.*;
 
 import java.time.LocalDate;
@@ -15,7 +16,8 @@ import java.util.Scanner;
 
 public class Main {
 
-    static UsersServiceImpl userService = new UsersServiceImpl();
+    static UsersServiceImpl userServiceImpl = new UsersServiceImpl();
+    static AdminServiceImpl adminServiceImpl = new AdminServiceImpl();
     static StudentServiceImpl studentServiceImpl = new StudentServiceImpl();
     static TeacherServiceImpl teacherServiceImpl = new TeacherServiceImpl();
     static LessonServiceImpl lessonServiceImpl = new LessonServiceImpl();
@@ -89,85 +91,110 @@ public class Main {
         admin1.setLastName("Boushehri");
         admin1.setUsername("admin");
         admin1.setPassword("admin");
-        admin1.setPhoneNumber("01234555891");
+        admin1.setPhoneNumber("09121125431");
         admin1.setEmail("admin@example.com");
-        admin1.setNationalId("1234567893");
-        admin1.setAdminId("9876543274");
+        admin1.setNationalId("0012301271");
+        admin1.setAdminId("5");
+        //adminServiceImpl.save(admin1);
 
 
         Lesson lesson1 = Lesson.builder().lessonName("Math").build();
         //lessonServiceImpl.save(lesson1);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         System.out.println("Welcome to University app <3");
+
         while (true) {
             System.out.println("*Main Menu*");
             System.out.println("1. Admin Login");
             System.out.println("2. Teacher Login");
             System.out.println("3. Student Login");
-            System.out.println("4. Exit");
+            System.out.println("4. Admin Login");
+            System.out.println("5. Teacher Login");
+            System.out.println("6. Student Login");
+            System.out.println("7. Exit");
             System.out.println("Choose You Action: ");
 
             int option = getInt();
 
             Map<Integer, Runnable> menuActions = Map.of(
-                    1, () -> adminMenu(),
-                    2, () -> teacherMenu(),
-                    3, () -> studentMenu(),
-                    4, () -> System.exit(0)
+                    1, () -> adminLoginMenu(),
+                    2, () -> teacherLoginMenu(),
+                    3, () -> studentLoginMenu(),
+                    4, () -> adminMenu(),
+                    5, () -> teacherMenu(),
+                    6, () -> studentMenu(),
+                    7, () -> System.exit(0)
             );
 
             menuActions.getOrDefault(option, () -> System.out.println("Invalid number. Please try again.")).run();
         }
     }
 
+    private static void adminLoginMenu() {
+        try {
+            System.out.println("Please Enter Your Username:");
+            String loginUsername = getString();
+            System.out.println("Please Enter Your Password:");
+            String loginPassword = getString();
+            if (adminServiceImpl.adminLogin(loginUsername, loginPassword)) {
+                adminMenu();
+            }
+
+        } catch (FailedToLoginException e) {
+            System.out.println("Login failed: " + e.getMessage());
+        }
+    }
+
+    private static void teacherLoginMenu() {
+        try {
+            System.out.println("Please Enter Your Username:");
+            String loginUsername = getString();
+            System.out.println("Please Enter Your Password:");
+            String loginPassword = getString();
+            if (teacherServiceImpl.teacherLogin(loginUsername, loginPassword)) {
+                teacherMenu();
+            }
+
+        } catch (FailedToLoginException e) {
+            System.out.println("Login failed: " + e.getMessage());
+        }
+    }
+
+    private static void studentLoginMenu() {
+        try {
+            System.out.println("Please Enter Your Username:");
+            String loginUsername = getString();
+            System.out.println("Please Enter Your Password:");
+            String loginPassword = getString();
+            if (studentServiceImpl.studentLogin(loginUsername, loginPassword)) {
+                studentMenu();
+            }
+
+        } catch (FailedToLoginException e) {
+            System.out.println("Login failed: " + e.getMessage());
+        }
+    }
+
     private static void adminMenu() {
         while (true) {
-        System.out.println("*Admin Menu*");
-        System.out.println("1. View All Teachers List");
-        System.out.println("2. View All Student List");
-        System.out.println("3. View All Lessons List");
-        System.out.println("4. Add a Teacher");
-        System.out.println("5. Remove a Teacher");
-        System.out.println("6. Add a Student");
-        System.out.println("7. Remove a Student");
-        System.out.println("8. Add a new Lesson");
-        System.out.println("9. Remove a Lesson");
-        System.out.println("10. Edit a Lesson");
-        System.out.println("11. Change a Lesson's Teacher");
-        System.out.println("12. Change Password");
-        System.out.println("13. Main Menu");
-        System.out.println("Choose You Action:");
+            System.out.println("*Admin Menu*");
+            System.out.println("1. View All Teachers List");
+            System.out.println("2. View All Student List");
+            System.out.println("3. View All Lessons List");
+            System.out.println("4. Add a Teacher");
+            System.out.println("5. Remove a Teacher");
+            System.out.println("6. Add a Student");
+            System.out.println("7. Remove a Student");
+            System.out.println("8. Add a new Lesson");
+            System.out.println("9. Remove a Lesson");
+            System.out.println("10. Edit a Lesson");
+            System.out.println("11. Change a Lesson's Teacher");
+            System.out.println("12. Change Password");
+            System.out.println("13. Logout");
+            System.out.println("Choose You Action:");
 
-        int option = getInt();
+            int option = getInt();
 
 
             switch (option) {
@@ -241,7 +268,7 @@ public class Main {
                     System.out.println("Please Enter the National ID:");
                     String stNID = getString();
                     newStudent.setNationalId(stNID);
-                    System.out.println("Please Enter the Student ID");
+                    System.out.println("Please Enter the Student ID:");
                     String stID = getString();
                     newStudent.setStudentId(stID);
 
@@ -277,10 +304,10 @@ public class Main {
                     int month = getInt();
                     System.out.println("Please Enter the Day of the Start:");
                     int day = getInt();
-                    LocalDate startDate = LocalDate.of(year,month,day);
+                    LocalDate startDate = LocalDate.of(year, month, day);
                     newLesson.setStartDate(startDate);
 
-                    lessonServiceImpl.save(newLesson,trId);
+                    lessonServiceImpl.save(newLesson, trId);
                     break;
 
                 case 9:
@@ -355,71 +382,70 @@ public class Main {
                     break;
 
                 case 13:
+                    adminServiceImpl.adminLogout();
                     return;
             }
         }
     }
 
-        private static void teacherMenu () {
+    private static void teacherMenu() {
 
-            System.out.println("*Teacher Menu*");
-            System.out.println("1. View My Lessons");
-            System.out.println("2. View My Student List");
-            System.out.println("3. Submit Score");
-            System.out.println("4. Main Menu");
-            System.out.println("Choose You Action:");
+        System.out.println("*Teacher Menu*");
+        System.out.println("1. View My Lessons");
+        System.out.println("2. View My Student List");
+        System.out.println("3. Submit Score");
+        System.out.println("4. Logout");
+        System.out.println("Choose You Action:");
 
-            int option = getInt();
+        int option = getInt();
 
-            while (true) {
-                switch (option) {
-                    case 1:
-                        break;
+        while (true) {
+            switch (option) {
+                case 1:
+                    break;
 
-                    case 2:
-                        break;
+                case 2:
+                    break;
 
-                    case 3:
-                        break;
+                case 3:
+                    break;
 
-                    case 4:
-                        return;
-                }
+                case 4:
+                    teacherServiceImpl.teacherLogout();
+                    return;
             }
         }
-
-
-        private static void studentMenu () {
-
-            System.out.println("*Student Menu*");
-            System.out.println("1. Take a Course");
-            System.out.println("2. View All Courses");
-            System.out.println("3. Change Password");
-            System.out.println("4. Main Menu");
-            System.out.println("Choose You Action:");
-
-            int option = getInt();
-
-            while (true) {
-                switch (option) {
-                    case 1:
-                        break;
-
-                    case 2:
-                        break;
-
-                    case 3:
-                        break;
-
-                    case 4:
-                        return;
-                }
-            }
-        }
-
-
-
-
-
-
     }
+
+
+    private static void studentMenu() {
+
+        System.out.println("*Student Menu*");
+        System.out.println("1. Take a Course");
+        System.out.println("2. View All Courses");
+        System.out.println("3. Change Password");
+        System.out.println("4. Logout");
+        System.out.println("Choose You Action:");
+
+        int option = getInt();
+
+        while (true) {
+            switch (option) {
+                case 1:
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+
+                case 4:
+                    studentServiceImpl.studentLogout();
+                    return;
+            }
+        }
+    }
+
+
+}

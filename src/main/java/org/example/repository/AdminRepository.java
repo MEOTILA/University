@@ -11,4 +11,5 @@ public interface AdminRepository {
     public List<Admin> findAll(Session session);
     public Optional<Admin> findById(Session session, Long id);
     public int deleteById(Session session, Long id);
+    public Optional<Admin> findByUsername(Session session, String username);
 }
