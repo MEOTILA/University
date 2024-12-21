@@ -147,17 +147,16 @@ public class LessonServiceImpl implements LessonService {
         }
     }
 
-    public Lesson update(Lesson lesson) {
+    public Lesson update(Lesson lesson, Long lessonId) {
         try (var session = SessionFactoryInstance.sessionFactory.openSession()) {
             try {
                 session.beginTransaction();
-                var existingLesson = lessonRepositoryImpl.findById(session, lesson.getId())
+                var existingLesson = lessonRepositoryImpl.findById(session, lessonId)
                         .orElseThrow(() -> new RuntimeException("Lesson not found!"));
 
                 existingLesson.setLessonName(lesson.getLessonName());
                 existingLesson.setLessonUnit(lesson.getLessonUnit());
                 existingLesson.setLessonCapacity(lesson.getLessonCapacity());
-                existingLesson.setTeacher(lesson.getTeacher());
                 existingLesson.setStartDate(lesson.getStartDate());
 
                 if (!existingLesson.getStudents().equals(lesson.getStudents())) {

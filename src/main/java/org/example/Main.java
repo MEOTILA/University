@@ -162,7 +162,7 @@ public class Main {
         System.out.println("8. Add a new Lesson");
         System.out.println("9. Remove a Lesson");
         System.out.println("10. Edit a Lesson");
-        System.out.println("11. Update a Lesson Teacher");
+        System.out.println("11. Change a Lesson's Teacher");
         System.out.println("12. Change Password");
         System.out.println("13. Main Menu");
         System.out.println("Choose You Action:");
@@ -290,6 +290,43 @@ public class Main {
                     break;
 
                 case 10:
+
+                    System.out.println("Please Enter the Lesson ID:");
+                    Long lessonId2 = getLong();
+
+                    Optional<Lesson> optionalLesson2 = lessonServiceImpl.findById(lessonId2);
+
+                    if (optionalLesson2.isPresent()) {
+                        Lesson editingLesson = optionalLesson2.get();
+
+                        System.out.println("Please Enter the Lesson Name:");
+                        String lessonName2 = getString();
+                        editingLesson.setLessonName(lessonName2);
+
+                        System.out.println("Please Enter the Lesson Unit:");
+                        Integer lessonUnit2 = getInt();
+                        editingLesson.setLessonUnit(lessonUnit2);
+
+                        System.out.println("Please Enter the Lesson Capacity:");
+                        Integer lessonCap2 = getInt();
+                        editingLesson.setLessonCapacity(lessonCap2);
+
+                        System.out.println("Please Enter the Year of the Start:");
+                        int year2 = getInt();
+                        System.out.println("Please Enter the Month of the Start:");
+                        int month2 = getInt();
+                        System.out.println("Please Enter the Day of the Start:");
+                        int day2 = getInt();
+                        LocalDate startDate2 = LocalDate.of(year2, month2, day2);
+                        editingLesson.setStartDate(startDate2);
+
+                        lessonServiceImpl.update(editingLesson, lessonId2);
+
+                        System.out.println("Lesson updated successfully!");
+                    } else {
+                        System.out.println("Lesson with ID " + lessonId2 + " not found.");
+                    }
+
                     break;
 
                 case 11:
