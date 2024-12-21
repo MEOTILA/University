@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -39,11 +41,24 @@ public class Lesson {
     private Integer lessonCapacity;
 
 
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
-
     @NotNull(message = "Start Date cannot be null!")
     @FutureOrPresent(message = "Start Date must be today or in the future!")
     private LocalDate startDate;
+
+
+    @NotNull(message = "Teacher cannot be null!")
+    @ManyToOne
+    @JoinColumn(name = "teacher_id", nullable = false)
+    private Teacher teacher;
+
+
+    @Size(max = 99, message = "A lesson cannot have more than 99 students!")
+    @ManyToMany
+    @JoinTable(
+            name = "student_lesson",
+            joinColumns = @JoinColumn(name = "lesson_id"),
+            inverseJoinColumns = @JoinColumn(name = "student_id")
+    )
+    private Set<Student> students = new HashSet<>();
+
 }

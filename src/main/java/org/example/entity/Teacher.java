@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
@@ -35,4 +38,9 @@ public class Teacher extends Users {
     @Size(min = 1, max = 10, message = "Teacher ID must be 1-10 digits!")
     @Column(length = 10, unique = true)
     private String teacherId;
+
+
+    @Size(max = 10, message = "A teacher cannot take more than 10 lessons!")
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Lesson> lessons = new HashSet<>();
 }
